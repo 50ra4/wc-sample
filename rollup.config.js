@@ -10,6 +10,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 
 import * as fs from 'fs';
+import * as path from 'path';
 
 const createSetting = (name) => ({
   input: `dist/${name}.js`,
@@ -41,8 +42,8 @@ const createSetting = (name) => ({
 
 const DIST_DIR = 'dist';
 const FILES = fs.readdirSync(DIST_DIR);
-const JS_FILENAMES = FILES.map((file) => file.split('.'))
-  .filter(([_, ex]) => ex === 'js')
-  .map(([name]) => name);
+const JS_FILENAMES = FILES.filter(
+  (file) => fs.statSync(`${DIST_DIR}/${file}`).isFile() && /.*\.js$/.test(file)
+).map((file) => path.basename(file, '.js'));
 
 export default JS_FILENAMES.map(createSetting);
