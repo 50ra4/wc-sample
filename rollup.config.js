@@ -9,10 +9,12 @@ import {terser} from 'rollup-plugin-terser';
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 
-export default {
-  input: 'my-element.js',
+import * as fs from 'fs';
+
+const createSetting = (name) => ({
+  input: `dist/${name}.js`,
   output: {
-    file: 'my-element.bundled.js',
+    file: `docs/${name}.bundled.js`,
     format: 'esm',
   },
   onwarn(warning) {
@@ -35,4 +37,12 @@ export default {
     }),
     summary(),
   ],
-};
+});
+
+const DIST_DIR = 'dist';
+const FILES = fs.readdirSync(DIST_DIR);
+const JS_FILENAMES = FILES.map((file) => file.split('.'))
+  .filter(([_, ex]) => ex === 'js')
+  .map(([name]) => name);
+
+export default JS_FILENAMES.map(createSetting);
