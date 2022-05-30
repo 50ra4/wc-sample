@@ -6,7 +6,8 @@
     <title>&lt;my-element> Demo</title>
     <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
     <script src="../node_modules/lit/polyfill-support.js"></script>
-    <script type="module" src="../my-element.js"></script>
+    <script type="module" src="../dist/my-element.js"></script>
+    <script type="module" src="../dist/wc-button.js"></script>
     <style>
       p {
         border: solid 1px blue;
@@ -18,5 +19,10 @@
     <my-element>
       <p>This is child content</p>
     </my-element>
+    <div>
+      <wc-button color="success">success</wc-button>
+      <wc-button color="error">error</wc-button>
+      <wc-button color="warning">warning</wc-button>
+    </div>
   </body>
 </html>
