@@ -1,6 +1,6 @@
-import {LitElement, css, html} from 'lit';
-import {customElement, property} from 'lit/decorators.js';
-import {styleMap} from 'lit/directives/style-map.js';
+import { LitElement, css, html } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { styleMap } from 'lit/directives/style-map.js';
 
 const BUTTON_COLOR = {
   success: {
@@ -35,7 +35,7 @@ export class WCButton extends LitElement {
   /**
    * Buttonの色を指定する（success、error、warning）
    */
-  @property({type: String})
+  @property({ type: String })
   color: ButtonColor = 'success';
 
   override render() {
