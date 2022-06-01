@@ -12,8 +12,14 @@ import replace from '@rollup/plugin-replace';
 import * as fs from 'fs';
 import * as path from 'path';
 
+const DIST_DIR = 'dist/components';
+const FILES = fs.readdirSync(DIST_DIR);
+const TARGET_FILENAMES = FILES.filter(
+  (file) => fs.statSync(path.join(DIST_DIR, file)).isFile() && /.*\.js$/.test(file),
+).map((file) => path.basename(file, '.js'));
+
 const createSetting = (name) => ({
-  input: `dist/${name}.js`,
+  input: `${DIST_DIR}/${name}.js`,
   output: {
     file: `docs/${name}.bundled.js`,
     format: 'esm',
@@ -40,10 +46,4 @@ const createSetting = (name) => ({
   ],
 });
 
-const DIST_DIR = 'dist';
-const FILES = fs.readdirSync(DIST_DIR);
-const JS_FILENAMES = FILES.filter(
-  (file) => fs.statSync(`${DIST_DIR}/${file}`).isFile() && /.*\.js$/.test(file),
-).map((file) => path.basename(file, '.js'));
-
-export default JS_FILENAMES.map(createSetting);
+export default TARGET_FILENAMES.map(createSetting);
