@@ -15,7 +15,8 @@ import * as path from 'path';
 const DIST_DIR = 'dist/components';
 const FILES = fs.readdirSync(DIST_DIR);
 const TARGET_FILENAMES = FILES.filter(
-  (file) => fs.statSync(path.join(DIST_DIR, file)).isFile() && /.*\.js$/.test(file),
+  (file) =>
+    fs.statSync(path.join(DIST_DIR, file)).isFile() && /.*\.js$/.test(file) && !/.test./.test(file),
 ).map((file) => path.basename(file, '.js'));
 
 const createSetting = (name) => ({
