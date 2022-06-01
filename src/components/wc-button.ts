@@ -13,8 +13,11 @@ export class WCButton extends LitElement {
   static override styles = [
     ...RESET_CSS,
     css`
-      :host {
+      .root {
+        min-height: 48px;
         min-width: 180px;
+        font-size: 14px;
+        font-weight: bold;
       }
     `,
   ];
@@ -32,7 +35,7 @@ export class WCButton extends LitElement {
     });
 
     return html`
-      <button @click=${this._onClick} style="${buttonStyle}">
+      <button @click=${this._onClick} class="root" style="${buttonStyle}">
         <slot></slot>
       </button>
     `;
