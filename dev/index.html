@@ -8,6 +8,7 @@
     <script src="../node_modules/lit/polyfill-support.js"></script>
     <script type="module" src="../dist/components/my-element.js"></script>
     <script type="module" src="../dist/components/wc-button.js"></script>
+    <script type="module" src="../dist/components/todo-list.js"></script>
     <style>
       p {
         border: solid 1px blue;
@@ -23,6 +24,9 @@
       <wc-button color="success">success</wc-button>
       <wc-button color="error">error</wc-button>
       <wc-button color="warning">warning</wc-button>
+    </div>
+    <div>
+      <todo-list title="My Todo List" storageKey="my-todo-list"></todo-list>
     </div>
   </body>
 </html>
