@@ -13,6 +13,7 @@ const createId = () => `${new Date().getTime() * Math.random()}`;
 
 /**
  * todo-list
+ * @slot なし
  */
 @customElement('todo-list')
 export class TodoList extends LitElement {
@@ -105,13 +106,13 @@ export class TodoList extends LitElement {
   private todoList: Todo[] = [];
 
   /**
-   * 完了したタスクを非表示にするフラグ
+   * 完了したTodoを非表示にするか
    */
   @state()
   private hideCompleted = false;
 
   /**
-   * 追加するタスクのテキスト
+   * 入力中のTodoのテキスト
    */
   @state()
   private text = '';
@@ -180,14 +181,23 @@ export class TodoList extends LitElement {
     </section>`;
   }
 
+  /**
+   * 完了したタスクを非表示にするかを切り替える
+   */
   private toggleHideCompleted(e: Event) {
     this.hideCompleted = (e.target as HTMLInputElement).checked;
   }
 
+  /**
+   * inputのテキストを反映する
+   */
   private changeText(e: Event) {
     this.text = (e.target as HTMLInputElement).value;
   }
 
+  /**
+   * Todoを新しく追加する
+   */
   private createTodo() {
     this.todoList = [
       ...this.todoList,
@@ -196,12 +206,18 @@ export class TodoList extends LitElement {
     this.text = '';
   }
 
+  /**
+   * Todoを完了/未完了に切り替える
+   */
   private toggleTodo(id: string) {
     this.todoList = this.todoList.map((todo) =>
       todo.id !== id ? todo : { ...todo, completed: !todo.completed },
     );
   }
 
+  /**
+   * TodoをlocalStorageに保存する
+   */
   private saveTodoList() {
     if (!this.storageKey) {
       throw Error('storageKey property is required.');
@@ -210,6 +226,9 @@ export class TodoList extends LitElement {
     window.alert('completed to save.');
   }
 
+  /**
+   * 表示しているTodoを全て削除する
+   */
   private clearTodoList() {
     this.todoList = [];
   }
