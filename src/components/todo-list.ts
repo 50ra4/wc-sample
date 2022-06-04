@@ -122,7 +122,6 @@ export class TodoList extends LitElement {
       throw Error('storageKey property is required.');
     }
     this.todoList = JSON.parse(window.localStorage.getItem(this.storageKey) ?? '[]') as Todo[];
-    this.requestUpdate();
   }
 
   override disconnectedCallback() {
@@ -183,12 +182,10 @@ export class TodoList extends LitElement {
 
   private toggleHideCompleted(e: Event) {
     this.hideCompleted = (e.target as HTMLInputElement).checked;
-    this.requestUpdate();
   }
 
   private changeText(e: Event) {
     this.text = (e.target as HTMLInputElement).value;
-    this.requestUpdate();
   }
 
   private createTodo() {
@@ -203,7 +200,6 @@ export class TodoList extends LitElement {
     this.todoList = this.todoList.map((todo) =>
       todo.id !== id ? todo : { ...todo, completed: !todo.completed },
     );
-    this.requestUpdate();
   }
 
   private saveTodoList() {
@@ -216,7 +212,6 @@ export class TodoList extends LitElement {
 
   private clearTodoList() {
     this.todoList = [];
-    this.requestUpdate();
   }
 }
 
