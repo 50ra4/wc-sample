@@ -1,15 +1,7 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import { TodoListController } from '../controllers/todo-list-controller';
 import { RESET_CSS } from '../styles';
-
-type Todo = {
-  id: string;
-  completed: boolean;
-  text: string;
-  createdAt: number;
-};
-
-const createId = () => `${new Date().getTime() * Math.random()}`;
 
 /**
  * todo-list
@@ -100,12 +92,6 @@ export class TodoList extends LitElement {
   heading = '';
 
   /**
-   * Todoリストの一覧
-   */
-  @state()
-  private todoList: Todo[] = [];
-
-  /**
    * 完了したTodoを非表示にするか
    */
   @state()
@@ -117,12 +103,14 @@ export class TodoList extends LitElement {
   @state()
   private text = '';
 
+  private todoList = new TodoListController(this);
+
   override connectedCallback() {
     super.connectedCallback();
     if (!this.storageKey) {
       throw Error('storageKey property is required.');
     }
-    this.todoList = JSON.parse(window.localStorage.getItem(this.storageKey) ?? '[]') as Todo[];
+    this.todoList.restoreTodoList(this.storageKey);
   }
 
   override disconnectedCallback() {
@@ -131,8 +119,8 @@ export class TodoList extends LitElement {
 
   override render() {
     const items = !this.hideCompleted
-      ? this.todoList
-      : this.todoList.filter(({ completed }) => !completed);
+      ? this.todoList.data
+      : this.todoList.data.filter(({ completed }) => !completed);
 
     return html`<section>
       <h3 class="title">${this.heading}</h3>
@@ -169,11 +157,11 @@ export class TodoList extends LitElement {
         Hide completed
       </label>
       <div class="bottom-wrapper">
-        <button @click=${this.saveTodoList} ?disabled=${!this.todoList.length}>Save</button>
+        <button @click=${this.saveTodoList} ?disabled=${!this.todoList.data.length}>Save</button>
         <button
           class="clear-button"
           @click=${this.clearTodoList}
-          ?disabled=${!this.todoList.length}
+          ?disabled=${!this.todoList.data.length}
         >
           Clear
         </button>
@@ -199,10 +187,7 @@ export class TodoList extends LitElement {
    * Todoを新しく追加する
    */
   private createTodo() {
-    this.todoList = [
-      ...this.todoList,
-      { id: createId(), text: this.text, completed: false, createdAt: new Date().getTime() },
-    ];
+    this.todoList.createTodo(this.text);
     this.text = '';
   }
 
@@ -210,9 +195,7 @@ export class TodoList extends LitElement {
    * Todoを完了/未完了に切り替える
    */
   private toggleTodo(id: string) {
-    this.todoList = this.todoList.map((todo) =>
-      todo.id !== id ? todo : { ...todo, completed: !todo.completed },
-    );
+    this.todoList.toggleTodoCompleted(id);
   }
 
   /**
@@ -222,15 +205,14 @@ export class TodoList extends LitElement {
     if (!this.storageKey) {
       throw Error('storageKey property is required.');
     }
-    window.localStorage.setItem(this.storageKey, JSON.stringify(this.todoList));
-    window.alert('completed to save.');
+    this.todoList.saveTodoList(this.storageKey);
   }
 
   /**
    * 表示しているTodoを全て削除する
    */
   private clearTodoList() {
-    this.todoList = [];
+    this.todoList.clearTodoList();
   }
 }
 
