@@ -30,6 +30,7 @@ export class TodoListController implements ReactiveController {
    */
   public restoreTodoList(key: string) {
     this._data = [...(JSON.parse(window.localStorage.getItem(key) ?? '[]') as Todo[])];
+    this.host.requestUpdate();
   }
 
   /**
@@ -48,6 +49,7 @@ export class TodoListController implements ReactiveController {
       ...this._data,
       { id: createId(), text: text, completed: false, createdAt: new Date().getTime() },
     ];
+    this.host.requestUpdate();
   }
 
   /**
@@ -57,6 +59,7 @@ export class TodoListController implements ReactiveController {
     this._data = this.data.map((todo) =>
       todo.id !== id ? todo : { ...todo, completed: !todo.completed },
     );
+    this.host.requestUpdate();
   }
 
   /**
@@ -64,5 +67,6 @@ export class TodoListController implements ReactiveController {
    */
   public clearTodoList() {
     this._data = [];
+    this.host.requestUpdate();
   }
 }
